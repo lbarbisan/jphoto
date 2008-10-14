@@ -1,0 +1,96 @@
+
+<!-- 
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+* This file is part of Jphoto.                              *                                 *
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+-->
+
+<project name="Jphoto" default="jar">
+
+	<!-- 
+	=====================================
+	Global Properties 
+	=====================================
+	-->
+
+	  <property name="package" value="jphoto"/>
+	  <property name="version" value="1.0"/>
+
+	  <property name="src.dir" value="src"/>
+	  <property name="classes.dir" value="classes"/>
+	  <property name="package.name" value="${package}-${version}"/>
+	  <property name="lib.dir" value="lib"/>
+	  <property name="bin.dir" value="bin"/>
+	  <property name="javadoc.dir" value="docs/api"/>
+	  <property name="resources.dir" value="src/resources"/>
+	  <property name="packageList" value="packagelist"/>
+	  <property name="main-class" value="fr.umlv.jphoto.cela.ui.JphotoUI"/>
+
+
+	  <!--
+	  =====================================
+	     Compile Target
+	  =====================================
+	  -->
+	 <target name="compile"
+	    description="compile source files">
+
+	    <mkdir dir="${classes.dir}"/>
+
+	    <javac 
+	      srcdir="${src.dir}"
+	      destdir="${classes.dir}"
+	      includes="**/*.java" 
+	    />
+
+	    <copy todir="${classes.dir}">
+	      <fileset dir="${src.dir}">
+	        <include name="**/"/>
+	      	<exclude name="**/*.java"/>
+	      </fileset>
+	    </copy>
+	 	
+	  </target>
+	
+	<!--
+	=====================================
+	Jar Target
+	=====================================
+	-->
+
+	  <target name="jar" depends="compile" description="generate the executable jar">
+	  	<mkdir dir="${lib.dir}"/>
+	  	
+	  	<jar destfile="${lib.dir}/jphoto.jar"
+	         basedir="${classes.dir}">
+	  		<!-- Specifie le contenu du manifest a generer par ant -->
+	  		<manifest>
+	  		  	<attribute name="Built-By" value="${user.name}"/>
+	  		  	<attribute name="Main-Class" value="${main-class}"/>
+	  		<section name="Jphoto">
+	  			<attribute name="Version" value="1.0.0" />
+	  		</section>
+	  		</manifest>
+	    </jar>
+	  	
+	  </target>
+
+	  <target 
+		name="javadoc" 
+		depends="compile"
+		description="build the jphoto's javadoc"
+	  >
+
+	<mkdir dir="${javadoc.dir}"/>
+
+		    <javadoc
+		      doctitle="Jphoto Application"
+		      destdir="${javadoc.dir}"
+		      classpath="${classes.dir}"
+		      sourcepath="${src.dir}"
+		      packagelist="${packageList}"
+		    />
+		  </target>
+
+</project>
+
